@@ -1,0 +1,127 @@
+<html>
+<head>
+	<title>Intro to Leaflet</title>
+	<!-- the Leaflet CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
+
+	<link rel="stylesheet" href="http://coryasilva.github.io/Leaflet.ExtraMarkers/css/leaflet.extra-markers.min.css">
+
+	<!-- the Leaflet JavaScript library -->
+	<script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"></script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<script src= "https://cdn.jsdelivr.net/npm/leaflet-legend@1.0.2/leaflet-legend.min.js"></script>
+
+
+	<!--CSS styles-->
+	<style>
+		body {
+			font-family: sans-serif;
+			max-width: 900px;
+			margin: auto;
+		}
+
+		#legend {
+			line-height: 0px;
+			background: white;
+			opacity: 0.8;
+			padding:5px 25px 5px 0px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+	<h1>Schools</h1>
+	<!-- code where we create and name the container that holds the map -->
+	<div id="map" style="height: 80%"></div>
+
+	<p>This map shows the location of schools</p>
+	<p>Schools are important</a>.</p>
+
+	<div id="legend">
+		<h3><center>School type</center></h3>
+		<ul style="list-style-type:none">
+			<li>
+				<svg width="24" height="24">
+					<circle cx="12" cy="20" r="5" stroke="green" stroke-width="3" fill="green" fill-opacity=".4"/>
+				</svg>
+				<text>Elementary School</text>
+			</li>
+			<li>
+				<svg width="24" height="24">
+					<circle cx="12" cy="18" r="5" stroke="yellow" stroke-width="3" fill="yellow" fill-opacity=".4"/>
+				</svg>
+				<text>Middle/Intermediate/Junior High School</text>
+			</li>
+			<li>
+				<svg width="24" height="24">
+					<circle cx="12" cy="14" r="5" stroke="red" stroke-width="3" fill="red" fill-opacity=".4"/>
+				</svg>
+				<text>High School</text>
+			</li>
+			<li>
+				<svg width="24" height="24">
+					<circle cx="12" cy="12" r="5" stroke="purple" stroke-width="3" fill="purple" fill-opacity=".4"/>
+				</svg>
+				<text x="0" y="0)">College/Technical College/University</text>
+			</li>
+			<li>
+				<svg width="24" height="24">
+					<circle cx="12" cy="12" r="5" stroke="blue" stroke-width="3" fill="blue" fill-opacity=".4"/>
+				</svg>
+				<text x="0" y="0)">Private School</text>
+			</li>
+		</ul>
+	</div>
+
+	<!-- code where we build the map and its functionality -->
+	<script>
+		var mymap = L.map('map').setView([47.25, -122.44], 12);
+		var basemap = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/terrain/{z}/{x}/{y}{r}.png', {
+			attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+		}).addTo(mymap);
+
+		$.getJSON("https://opendata.arcgis.com/datasets/4c4e92b1b357465fba1f507ac8d0f967_0.geojson",function(data){
+			L.geoJson(data, {
+							pointToLayer: function(feature, latlng){
+								var marker = L.marker(latlng);
+									marker.bindPopup("Route " + feature.properties.Designator + "<br>" + feature.properties.line_name).addTo(mymap);
+									return route;
+							}
+					}).addTo(mymap);
+			});
+
+		// load GeoJSON from an external file and add it to the map
+		$.getJSON("https://opendata.arcgis.com/datasets/f67ca6743cec4a05a9bbfad7050bc4e5_0.geojson",function(data){
+			L.geoJson(data, {
+				pointToLayer: function(feature, latlng){
+	        var typeColor,
+					type = feature.properties.TYPE;
+	          if (type == 'ELEM' || type == 'PRIM') typeColor = 'green';
+						else if (type == 'MID' || type == 'INTER' || type == 'JRHIGH') typeColor = 'yellow';
+	          else if (type == 'HIGH') typeColor = 'red';
+						else if (type == 'COLLEGE' || type == 'UNIVERSITY' || type == 'TECHNICAL') typeColor = 'purple';
+						else if (type == 'PRIVATE') typeColor = 'blue';
+						else typeColor = 'brown';
+        	var marker = L.circleMarker(latlng, {radius: 5, color: typeColor});
+					marker.bindPopup("Name: " + feature.properties.NAME + "<br>Address: " + feature.properties.ADDRESS + "<br>Type: " + feature.properties.TYPE + "<br><a href =" + feature.properties.WEBSITE +">School Website</a>");
+					return marker;
+				}
+			}).addTo(mymap);
+		});
+
+
+
+		var Legend =  new L.Control.Legend({
+			position: 'bottomright',
+		});
+
+		mymap.addControl(Legend);
+		$(".legend-container").append( $("#legend") );
+
+	</script>
+</body>
+</html>
