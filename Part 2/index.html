@@ -2,7 +2,7 @@
 <head>
 	<link rel="stylesheet" href="styles.css">
 
-	<title>Intro to Leaflet</title>
+	<title>Schools and Buses - Lab 2 Part 2</title>
 	<!-- the Leaflet CSS -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"/>
 
@@ -19,12 +19,12 @@
 </head>
 
 <body>
-	<h1>Schools</h1>
+	<h1>Schools and Buses</h1>
 	<!-- code where we create and name the container that holds the map -->
 	<div id="map" style="height: 80%"></div>
 
-	<p>This map shows the location of schools in relation to bus routes. The data for the schools came from this site: <a href = "https://gisdata-piercecowa.opendata.arcgis.com/datasets/schools?geometry=-122.989%2C47.183%2C-121.902%2C47.346">Pierce County Open Data</a></p>
-	<p>The data fpr bus routes came from <a href = "https://gis-piercetransit.opendata.arcgis.com/datasets/bus-routes?geometry=-123.501%2C47.070%2C-121.328%2C47.396">Pierce Transit Open Data</a></p>
+	<p>This map shows the location of schools in relation to bus routes. The data for the schools came from <a href = "https://gisdata-piercecowa.opendata.arcgis.com/datasets/schools?geometry=-122.989%2C47.183%2C-121.902%2C47.346">Pierce County OpenData</a>, while the data for bus routes came from <a href = "https://gis-piercetransit.opendata.arcgis.com/datasets/bus-routes?geometry=-123.501%2C47.070%2C-121.328%2C47.396">Pierce Transit OpenData</a>. The schools are color-coded based on what type of school they are (Elementary, Middle, High, etc.). Click on a school to find more information about the school.</p>
+	<p>The purpose of this map is to show how close different schools are to bus lines. Students need to be able to get to school, and access to public transit makes it easier. This is especially important for larger schools with older students, such as High Schools and Univerities, as regular school buses aren't used as often for those institutions as students are more expected to get themselves to school, either by driving themselves or by taking city buses (as shown in this map.) This means that high schools and universities will need more city bus lines nearby. In contrast, elementary and middle school students rely more on school buses or their parents dropping them off, and their respective institutions don't have as many students, so they don't need to have as many city bus lines nearby.</p>
 
 	<div id="legend">
 		<h3><center>School type</center></h3>
@@ -92,7 +92,7 @@
 						else if (type == 'PRIVATE') typeColor = 'blue';
 						else typeColor = 'brown';
         	var marker = L.circleMarker(latlng, {radius: 5, color: typeColor});
-					marker.bindPopup("Name: " + feature.properties.NAME + "<br>Address: " + feature.properties.ADDRESS + "<br>Type: " + feature.properties.TYPE + "<br><a href =" + feature.properties.WEBSITE +">School Website</a>");
+					marker.bindPopup("Name: " + feature.properties.NAME + "<br>Address: " + feature.properties.ADDRESS + "<br>Grades: " + feature.properties.GRADE + "<br><a href =" + feature.properties.WEBSITE +">School Website</a>");
 					return marker;
 				}
 			}).addTo(mymap);
